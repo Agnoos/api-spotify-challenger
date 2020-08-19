@@ -10,8 +10,8 @@ function App() {
 
   const [params, setParams] = useState();
   //  setParams({nowPlaying : params.nowPlaying})
-  const [nowPlayer, setNowPlayer] = useState()
-  const [nowPlayerImage, setNowPlayerImage] = useState()
+  const [nowPlayer, setNowPlayer] = useState('')
+  const [nowPlayerImage, setNowPlayerImage] = useState('')
 
   async function getHashParams() {
     let hashParams = {};
@@ -33,48 +33,26 @@ function App() {
   function getNowPlaying() {
     spotifyApi.getMyCurrentPlaybackState()
       .then((response) => {
-          console.log(spotifyApi)
-           setNowPlayer(response.item.name)
+        if(response){
+          setNowPlayer(response.item.name)
           setNowPlayerImage(response.item.album.images[0].url)
+        }
       })
   }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-
-
-        <a href="http://localhost:8888">
-          <button>Logar no Spotify</button>
-        </a>
-
-        <div>
-            {nowPlayer}
+      <div className="Song">
+        <div className="Image">
+          <img className="img" alt="" src={nowPlayerImage ? nowPlayerImage : '...'} />
         </div>
-
-        <div >
-          <img className="img"  alt="" src={nowPlayerImage}/>
+          <h2 className="name">{nowPlayer ? nowPlayer : 'Não esta ouvindo música agora.'}</h2>
+        <div className="container-button">
+          <a href="http://localhost:8888"><button className="button">Logar no Spotify</button></a>
+          <button  className="button" onClick={() => getNowPlaying()}>Ver oque estou ouvindo</button>
         </div>
-
-        <div>
-          <button onClick={() => getNowPlaying()}>
-            Check Noew Playing
-              </button>
-        </div>
-      </header>
+      </div>
     </div>
-  );
+  )
 }
 
 export default App;
